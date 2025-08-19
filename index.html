@@ -1,247 +1,184 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sistema Oficina Completo</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background-color: #f9f9f9;
     }
-
     .tabs {
       display: flex;
-      background-color: #1a73e8;
+      background-color: #007bff;
     }
-
-    .tab-button {
+    .tab {
       flex: 1;
-      padding: 15px;
-      cursor: pointer;
-      background-color: #1a73e8;
+      padding: 10px;
       color: white;
-      border: none;
-      outline: none;
-      transition: background 0.3s;
+      text-align: center;
+      cursor: pointer;
     }
-
-    .tab-button.active {
-      background-color: #0c47a1;
+    .tab:hover {
+      background-color: #0056b3;
     }
-
-    .tab-content {
-      display: none;
+    .active {
+      background-color: #0056b3;
+    }
+    .content {
       padding: 20px;
     }
-
-    .tab-content.active {
+    input, textarea, button {
       display: block;
-    }
-
-    .form-field {
-      margin-bottom: 10px;
-    }
-
-    .form-field input, .form-field textarea {
+      margin: 10px 0;
       width: 100%;
-      padding: 10px;
-      font-size: 14px;
+      padding: 8px;
     }
-
-    .success {
-      color: green;
-      margin-top: 10px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-
-    .record {
-      background: #fff;
-      padding: 10px;
-      margin-bottom: 8px;
-      border: 1px solid #ccc;
+    th, td {
+      border: 1px solid #aaa;
+      padding: 6px;
+      text-align: left;
     }
-
-    .btn-acao {
-      margin-top: 5px;
+    button.acao {
+      padding: 4px 8px;
+      margin: 2px;
     }
   </style>
 </head>
 <body>
-
   <div class="tabs">
-    <button class="tab-button active" onclick="openTab(event, 'entrada')">Entrada</button>
-    <button class="tab-button" onclick="openTab(event, 'aguardando')">Aguardando</button>
-    <button class="tab-button" onclick="openTab(event, 'emandamento')">Em Andamento</button>
-    <button class="tab-button" onclick="openTab(event, 'finalizado')">Finalizado</button>
+    <div class="tab active" onclick="trocarAba('entrada')">Entrada</div>
+    <div class="tab" onclick="trocarAba('aguardando')">Aguardando</div>
+    <div class="tab" onclick="trocarAba('emandamento')">Em Andamento</div>
+    <div class="tab" onclick="trocarAba('finalizado')">Finalizado</div>
   </div>
 
-  <div id="entrada" class="tab-content active">
-    <h2>Formulário de Entrada</h2>
-    <form id="formulario">
-      <div class="form-field"><input type="text" name="DATA E HORA" placeholder="Data e Hora" required /></div>
-      <div class="form-field"><input type="text" name="NOME" placeholder="Nome" required /></div>
-      <div class="form-field"><input type="text" name="CPF" placeholder="CPF" required /></div>
-      <div class="form-field"><input type="text" name="TELEFONE" placeholder="Telefone" required /></div>
-      <div class="form-field"><input type="text" name="ENDEREÇO" placeholder="Endereço" /></div>
-      <div class="form-field"><input type="text" name="NÚMERO" placeholder="Número" /></div>
-      <div class="form-field"><input type="text" name="BAIRRO" placeholder="Bairro" /></div>
-      <div class="form-field"><input type="text" name="CIDADE" placeholder="Cidade" /></div>
-      <div class="form-field"><input type="text" name="UF" placeholder="UF" /></div>
-      <div class="form-field"><input type="text" name="VEÍCULO" placeholder="Veículo" /></div>
-      <div class="form-field"><input type="text" name="KM INICIAL" placeholder="KM Inicial" /></div>
-      <div class="form-field"><input type="text" name="PLACA" placeholder="Placa" /></div>
-      <div class="form-field"><input type="text" name="ANO" placeholder="Ano" /></div>
-      <div class="form-field"><input type="text" name="MOTOR" placeholder="Motor" /></div>
-      <div class="form-field"><input type="text" name="MODELO" placeholder="Modelo" /></div>
-      <div class="form-field"><input type="text" name="PROBLEMA APONTADO" placeholder="Problema Apontado" /></div>
-      <div class="form-field"><input type="text" name="KM FINAL" placeholder="KM Final" /></div>
-      <div class="form-field"><input type="text" name="OBSERVAÇÕES" placeholder="Observações" /></div>
-      <div class="form-field"><textarea name="COTAÇÃO" placeholder="Itens, valores, mão de obra..."></textarea></div>
-      <button type="submit">Enviar</button>
-      <button type="reset">Limpar</button>
-      <div id="mensagem" class="success"></div>
-    </form>
-  </div>
-
-  <div id="aguardando" class="tab-content">
-    <h2>Registros Aguardando</h2>
-    <div id="tabela-aguardando"></div>
-  </div>
-
-  <div id="emandamento" class="tab-content">
-    <h2>Registros em Andamento</h2>
-    <div id="tabela-emandamento"></div>
-  </div>
-
-  <div id="finalizado" class="tab-content">
-    <h2>Registros Finalizados</h2>
-    <div id="tabela-finalizado"></div>
-  </div>
+  <div class="content" id="conteudo"></div>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwsc5_8uZVMoIrNB4jbyIpAa1NbUslHJKHNeU_sNI0e3Ddtrmrt0IXbumn8LjjUzca1BA/exec';
-    const planilhaID = '1H9MdkeXFNuT8AKYbCKEOpj1LxpELtSdVvxOhLWxXhJ0';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxQIh9n0rqefzWoLTWPGqG6HWKzEeHhYhjkuqzsUUvXtnW21BVkdf_BZM3nbZKOXsC1Ug/exec'; // SUBSTITUA AQUI PELO SEU LINK DO WEB APP
+    const planilhaID = '1H9MdkeXFNuT8AKYbCKEOpj1LxpELtsdVvxOhLWXXhJ0';
 
-    const form = document.getElementById('formulario');
-    const mensagem = document.getElementById('mensagem');
+    function trocarAba(aba) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelector(`.tab[onclick*="${aba}"]`).classList.add('active');
+      carregarConteudo(aba);
+    }
 
-    form.addEventListener('submit', e => {
+    function carregarConteudo(aba) {
+      const abaUpper = aba.toUpperCase();
+      const conteudo = document.getElementById('conteudo');
+
+      if (aba === 'entrada') {
+        conteudo.innerHTML = `
+          <h2>Formulário de Entrada</h2>
+          <form id="formulario">
+            <input name="DATA E HORA" placeholder="Data e Hora" required>
+            <input name="NOME" placeholder="Nome" required>
+            <input name="CPF" placeholder="CPF">
+            <input name="TELEFONE" placeholder="Telefone">
+            <input name="ENDEREÇO" placeholder="Endereço">
+            <input name="NÚMERO" placeholder="Número">
+            <input name="BAIRRO" placeholder="Bairro">
+            <input name="CIDADE" placeholder="Cidade">
+            <input name="UF" placeholder="UF">
+            <input name="VEÍCULO" placeholder="Veículo">
+            <input name="KM INICIAL" placeholder="KM Inicial">
+            <input name="PLACA" placeholder="Placa">
+            <input name="ANO" placeholder="Ano">
+            <input name="MOTOR" placeholder="Motor">
+            <input name="MODELO" placeholder="Modelo">
+            <input name="PROBLEMA APONTADO" placeholder="Problema Apontado">
+            <input name="KM FINAL" placeholder="KM Final">
+            <textarea name="OBSERVAÇÕES" placeholder="Observações"></textarea>
+            <textarea name="COTAÇÃO" placeholder="Cotação"></textarea>
+            <button type="submit">Enviar</button>
+          </form>
+        `;
+        document.getElementById('formulario').addEventListener('submit', enviarFormulario);
+      } else {
+        conteudo.innerHTML = `<h2>${capitalize(aba)}</h2><div id="tabelaDados">Carregando...</div>`;
+        fetch(`https://opensheet.elk.sh/${planilhaID}/${abaUpper}`)
+          .then(res => res.json())
+          .then(dados => {
+            if (!dados.length) {
+              document.getElementById('tabelaDados').innerHTML = 'Sem dados.';
+              return;
+            }
+
+            let tabela = `<table><thead><tr>`;
+            Object.keys(dados[0]).forEach(coluna => {
+              tabela += `<th>${coluna}</th>`;
+            });
+            tabela += `<th>Ações</th></tr></thead><tbody>`;
+            dados.forEach((linha, i) => {
+              tabela += `<tr>`;
+              Object.values(linha).forEach(celula => {
+                tabela += `<td>${celula}</td>`;
+              });
+
+              tabela += `<td>`;
+              if (aba === 'aguardando') {
+                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Mover para Em Andamento</button>`;
+              } else if (aba === 'emandamento') {
+                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'FINALIZADO')">Finalizar</button>`;
+                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'AGUARDANDO')">Voltar</button>`;
+              } else if (aba === 'finalizado') {
+                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Voltar</button>`;
+              }
+              tabela += `</td></tr>`;
+            });
+            tabela += `</tbody></table>`;
+            document.getElementById('tabelaDados').innerHTML = tabela;
+          })
+          .catch(() => {
+            document.getElementById('tabelaDados').innerHTML = 'Erro ao carregar os dados.';
+          });
+      }
+    }
+
+    function enviarFormulario(e) {
       e.preventDefault();
-      const formData = new FormData(form);
-      fetch(scriptURL + '?aba=AGUARDANDO', { method: 'POST', body: formData })
-        .then(() => {
-          mensagem.textContent = "Dados enviados com sucesso!";
-          form.reset();
-        })
-        .catch(error => {
-          mensagem.textContent = "Erro ao enviar dados!";
-          console.error('Erro:', error);
-        });
-    });
-
-    function openTab(evt, tabName) {
-      const tabcontent = document.getElementsByClassName("tab-content");
-      for (let i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].classList.remove("active");
-      }
-
-      const tablinks = document.getElementsByClassName("tab-button");
-      for (let i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-      }
-
-      document.getElementById(tabName).classList.add("active");
-      evt.currentTarget.classList.add("active");
-
-      if (tabName !== 'entrada') {
-        carregarDados(tabName);
-      }
+      const dados = new FormData(e.target);
+      fetch(`${scriptURL}?aba=AGUARDANDO`, {
+        method: 'POST',
+        body: dados
+      }).then(res => {
+        alert('Enviado com sucesso!');
+        e.target.reset();
+      }).catch(() => alert('Erro ao enviar.'));
     }
 
-    function carregarDados(aba) {
-      const container = document.getElementById(`tabela-${aba}`);
-      container.innerHTML = 'Carregando...';
-
-      const nomeAba = aba.toUpperCase().replace("EMANDAMENTO", "EM ANDAMENTO");
-      const url = `https://opensheet.elk.sh/${planilhaID}/${nomeAba}`;
-
-      fetch(url)
+    function mover(index, origem, destino) {
+      fetch(`https://opensheet.elk.sh/${planilhaID}/${origem.toUpperCase()}`)
         .then(res => res.json())
-        .then(data => {
-          if (!data.length) {
-            container.innerHTML = 'Nenhum registro encontrado.';
-            return;
-          }
-
-          container.innerHTML = '';
-          data.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'record';
-            div.innerHTML = `
-              <strong>${item['NOME'] || 'Sem nome'}</strong><br/>
-              Veículo: ${item['VEÍCULO'] || ''} | Placa: ${item['PLACA'] || ''}<br/>
-              Serviço: ${item['PROBLEMA APONTADO'] || ''}<br/>
-              Cotação: ${item['COTAÇÃO'] || ''}<br/>
-              ${aba === 'aguardando' ? `<button class="btn-acao" onclick="mover('${nomeAba}', ${index})">Mover para Em Andamento</button>` : ''}
-              ${aba === 'emandamento' ? `
-                <button class="btn-acao" onclick="mover('${nomeAba}', ${index})">Finalizar</button>
-                <button class="btn-acao" onclick="voltar('${nomeAba}', ${index})">Voltar</button>` : ''}
-            `;
-            container.appendChild(div);
-          });
-        });
-    }
-
-    function mover(origem, index) {
-      const destino = origem === 'AGUARDANDO' ? 'EM ANDAMENTO' :
-                      origem === 'EM ANDAMENTO' ? 'FINALIZADO' : '';
-      if (!destino) return;
-
-      fetch(`https://opensheet.elk.sh/${planilhaID}/${origem}`)
-        .then(res => res.json())
-        .then(data => {
-          const linha = data[index];
+        .then(dados => {
+          const linha = dados[index];
           const formData = new FormData();
           Object.keys(linha).forEach(key => {
             formData.append(key, linha[key]);
           });
 
-          fetch(scriptURL + '?aba=' + destino, {
+          fetch(`${scriptURL}?aba=${destino}`, {
             method: 'POST',
             body: formData
           }).then(() => {
             alert(`Movido para ${destino} com sucesso.`);
-            carregarDados(origem.toLowerCase().replace("EM ANDAMENTO", "emandamento"));
-          });
+            carregarConteudo(origem.toLowerCase());
+          }).catch(() => alert('Erro ao mover.'));
         });
     }
 
-    function voltar(origem, index) {
-      const destino = origem === 'FINALIZADO' ? 'EM ANDAMENTO' :
-                      origem === 'EM ANDAMENTO' ? 'AGUARDANDO' : '';
-      if (!destino) return;
-
-      fetch(`https://opensheet.elk.sh/${planilhaID}/${origem}`)
-        .then(res => res.json())
-        .then(data => {
-          const linha = data[index];
-          const formData = new FormData();
-          Object.keys(linha).forEach(key => {
-            formData.append(key, linha[key]);
-          });
-
-          fetch(scriptURL + '?aba=' + destino, {
-            method: 'POST',
-            body: formData
-          }).then(() => {
-            alert(`Movido para ${destino} com sucesso.`);
-            carregarDados(origem.toLowerCase().replace("EM ANDAMENTO", "emandamento"));
-          });
-        });
+    function capitalize(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
+
+    trocarAba('entrada');
   </script>
-
 </body>
 </html>
