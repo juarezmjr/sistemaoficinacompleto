@@ -77,28 +77,29 @@
       if (aba === 'entrada') {
         conteudo.innerHTML = `
           <h2>Formulário de Entrada</h2>
-          <form id="formulario">
-            <input name="DATA E HORA" placeholder="Data e Hora" required>
-            <input name="NOME" placeholder="Nome" required>
-            <input name="CPF" placeholder="CPF">
-            <input name="TELEFONE" placeholder="Telefone">
-            <input name="ENDEREÇO" placeholder="Endereço">
-            <input name="NÚMERO" placeholder="Número">
-            <input name="BAIRRO" placeholder="Bairro">
-            <input name="CIDADE" placeholder="Cidade">
-            <input name="UF" placeholder="UF">
-            <input name="VEÍCULO" placeholder="Veículo">
-            <input name="KM INICIAL" placeholder="KM Inicial">
-            <input name="PLACA" placeholder="Placa">
-            <input name="ANO" placeholder="Ano">
-            <input name="MOTOR" placeholder="Motor">
-            <input name="MODELO" placeholder="Modelo">
-            <input name="PROBLEMA APONTADO" placeholder="Problema Apontado">
-            <input name="KM FINAL" placeholder="KM Final">
-            <textarea name="OBSERVAÇÕES" placeholder="Observações"></textarea>
-            <textarea name="COTAÇÃO" placeholder="Cotação"></textarea>
-            <button type="submit">Enviar</button>
-          </form>
+<form id="formulario">
+  <input name="DATA E HORA" placeholder="Data e Hora" required>
+  <input name="NOME" placeholder="Nome" required>
+  <input name="CPF" placeholder="CPF">
+  <input name="TELEFONE" placeholder="Telefone">
+  <input name="ENDERECO" placeholder="Endereço">
+  <input name="NUMERO" placeholder="Número">
+  <input name="BAIRRO" placeholder="Bairro">
+  <input name="CIDADE" placeholder="Cidade">
+  <input name="UF" placeholder="UF">
+  <input name="VEICULO" placeholder="Veículo">
+  <input name="KM INICIAL" placeholder="KM Inicial">
+  <input name="PLACA" placeholder="Placa">
+  <input name="ANO" placeholder="Ano">
+  <input name="MOTOR" placeholder="Motor">
+  <input name="MODELO" placeholder="Modelo">
+  <input name="PROBLEMA APONTADO" placeholder="Problema Apontado">
+  <input name="KM FINAL" placeholder="KM Final">
+  <textarea name="OBSERVACOES" placeholder="Observações"></textarea>
+  <textarea name="COTACAO" placeholder="Cotação"></textarea>
+  <button type="submit">Enviar</button>
+</form>
+
         `;
         document.getElementById('formulario').addEventListener('submit', enviarFormulario);
       } else {
