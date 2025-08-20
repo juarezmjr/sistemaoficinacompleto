@@ -125,11 +125,11 @@
 
               tabela += `<td>`;
               if (aba === 'AGUARDANDO') {
-                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Mover para Em Andamento</button>`;
-              } else if (aba === 'emandamento') {
+                tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Mover para EM ANDAMENTO</button>`;
+              } else if (aba === 'EM ANDAMENTO') {
                 tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'FINALIZADO')">Finalizar</button>`;
                 tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'AGUARDANDO')">Voltar</button>`;
-              } else if (aba === 'finalizado') {
+              } else if (aba === 'FINALIZADO') {
                 tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Voltar</button>`;
               }
               tabela += `</td></tr>`;
