@@ -52,10 +52,10 @@
 </head>
 <body>
   <div class="tabs">
-    <div class="tab active" onclick="trocarAba('entrada')">Entrada</div>
-    <div class="tab" onclick="trocarAba('aguardando')">Aguardando</div>
-    <div class="tab" onclick="trocarAba('emandamento')">Em Andamento</div>
-    <div class="tab" onclick="trocarAba('finalizado')">Finalizado</div>
+    <div class="tab active" onclick="trocarAba('ENTRADA')">Entrada</div>
+    <div class="tab" onclick="trocarAba('AGUARDANDO')">Aguardando</div>
+    <div class="tab" onclick="trocarAba('EM ANDAMENTO')">Em Andamento</div>
+    <div class="tab" onclick="trocarAba('FINALIZADO')">Finalizado</div>
   </div>
 
   <div class="content" id="conteudo"></div>
@@ -74,9 +74,9 @@
       const abaUpper = aba.toUpperCase();
       const conteudo = document.getElementById('conteudo');
 
-      if (aba === 'entrada') {
+      if (aba === 'ENTRADA') {
         conteudo.innerHTML = `
-          <h2>Formulário de Entrada</h2>
+          <h2>Formulário de ENTRADA</h2>
 <form id="formulario">
   <input name="DATA E HORA" placeholder="Data e Hora" required>
   <input name="NOME" placeholder="Nome" required>
@@ -124,7 +124,7 @@
               });
 
               tabela += `<td>`;
-              if (aba === 'aguardando') {
+              if (aba === 'AGUARDANDO') {
                 tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'EM ANDAMENTO')">Mover para Em Andamento</button>`;
               } else if (aba === 'emandamento') {
                 tabela += `<button class="acao" onclick="mover(${i}, '${aba}', 'FINALIZADO')">Finalizar</button>`;
@@ -179,7 +179,7 @@
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
-    trocarAba('entrada');
+    trocarAba('ENTRADA');
   </script>
 </body>
 </html>
